@@ -15,6 +15,7 @@
 		BE626DB125A6426300979AC4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE626DAF25A6426300979AC4 /* LaunchScreen.storyboard */; };
 		BE626DBC25A6426400979AC4 /* FetchRewardsCodingExerciseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE626DBB25A6426400979AC4 /* FetchRewardsCodingExerciseTests.swift */; };
 		BE626DC725A6426400979AC4 /* FetchRewardsCodingExerciseUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE626DC625A6426400979AC4 /* FetchRewardsCodingExerciseUITests.swift */; };
+		BE626DD925A6447700979AC4 /* HomeScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE626DD825A6447700979AC4 /* HomeScreenVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		BE626DC225A6426400979AC4 /* FetchRewardsCodingExerciseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetchRewardsCodingExerciseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE626DC625A6426400979AC4 /* FetchRewardsCodingExerciseUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRewardsCodingExerciseUITests.swift; sourceTree = "<group>"; };
 		BE626DC825A6426400979AC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BE626DD825A6447700979AC4 /* HomeScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		BE626DA325A6426200979AC4 /* FetchRewardsCodingExercise */ = {
 			isa = PBXGroup;
 			children = (
+				BE626DD725A6444D00979AC4 /* Screens */,
 				BE626DA425A6426200979AC4 /* AppDelegate.swift */,
 				BE626DA625A6426200979AC4 /* SceneDelegate.swift */,
 				BE626DA825A6426200979AC4 /* ViewController.swift */,
@@ -126,6 +129,14 @@
 				BE626DC825A6426400979AC4 /* Info.plist */,
 			);
 			path = FetchRewardsCodingExerciseUITests;
+			sourceTree = "<group>";
+		};
+		BE626DD725A6444D00979AC4 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				BE626DD825A6447700979AC4 /* HomeScreenVC.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,6 +272,7 @@
 				BE626DA925A6426200979AC4 /* ViewController.swift in Sources */,
 				BE626DA525A6426200979AC4 /* AppDelegate.swift in Sources */,
 				BE626DA725A6426200979AC4 /* SceneDelegate.swift in Sources */,
+				BE626DD925A6447700979AC4 /* HomeScreenVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
