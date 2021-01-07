@@ -10,23 +10,34 @@ import UIKit
 class EventsTableView: UITableView {
     
     enum Section { case main }
-    var diffableDataSource: UITableViewDiffableDataSource<Section, String>!
-    var events: [String] = []
-
+    var diffableDataSource: UITableViewDiffableDataSource<Section, Event>!
+    var events: [Event] = []
+    
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: .plain)
         
-        events.append("Hi")
-        events.append("Hi1")
-        events.append("Hi2")
-        events.append("Hi3")
+        // TODO: Show loading screen
+        
         configureTableView()
-        updateData(for: events)
         configureDataSource()
+        loadData()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    private func loadData() {
+        NetworkManager.shared.getEvents { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let events):
+                self.updateData(for: events)
+            }
+        }
     }
     
     
@@ -42,20 +53,29 @@ class EventsTableView: UITableView {
     
     
     private func configureDataSource() {
-
+        
         diffableDataSource = UITableViewDiffableDataSource(tableView: self, cellProvider: { (tableView, indexPath, event) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: EventCell.reuseID, for: indexPath) as! EventCell
-            cell.eventNameLabel.text = "Los Angeles Rams at Tampa Bay Buccaneers"
-            cell.locationLabel.text = "Tampa, FL"
-            cell.dateLabel.text = "Tuesday, 24 Nov 2020 7:15 PM"
+            cell.eventNameLabel.text = event.name
+            cell.locationLabel.text = event.venue.location
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            if let date = dateFormatter.date(from: event.date) {
+                if event.timeTBD {
+                    cell.dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy ") + "(Time TBD)"
+                } else {
+                    cell.dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy h:mm a")
+                }
+            }
+            
             return cell
         })
     }
     
     
-    func updateData(for events: [String]) {
+    func updateData(for events: [Event]) {
         
-        var snapshot = NSDiffableDataSourceSnapshot<Section, String>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Event>()
         snapshot.appendSections([.main])
         snapshot.appendItems(events)
         DispatchQueue.main.async {
@@ -64,7 +84,7 @@ class EventsTableView: UITableView {
         self.events = events
     }
     
-
+    
 }
 
 

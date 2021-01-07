@@ -29,6 +29,13 @@ class EventCell: UITableViewCell {
     }
     
     
+    public func setCellData(event: Event) {
+        //eventImageView.image = event.imageURL
+        //eventNameLabel.text = event.name
+        //locationLabel.text = event.location
+        //dateLabel.text = event.date.getFormattedDate(format: "EEEE, MMM d, yyyy h:mm a")
+    }
+    
     
     private func configureLabels() {
         eventNameLabel.font = UIFont.systemFont(ofSize: 17)
@@ -40,11 +47,10 @@ class EventCell: UITableViewCell {
         dateLabel.textColor = .secondaryLabel
         
         eventNameLabel.numberOfLines = 0
-        locationLabel.numberOfLines = 0
         dateLabel.numberOfLines = 0
         
         eventNameLabel.lineBreakMode = .byWordWrapping
-        locationLabel.lineBreakMode = .byWordWrapping
+        locationLabel.lineBreakMode = .byTruncatingTail
         dateLabel.lineBreakMode = .byWordWrapping
     }
     
@@ -72,17 +78,17 @@ class EventCell: UITableViewCell {
             eventNameLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
             eventNameLabel.topAnchor.constraint(equalTo: eventImageView.topAnchor),
             eventNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            eventNameLabel.heightAnchor.constraint(equalToConstant: 50),
+            eventNameLabel.heightAnchor.constraint(equalToConstant: eventNameLabel.font.pointSize * 4 + 8),
             
             locationLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
-            locationLabel.topAnchor.constraint(equalTo: eventNameLabel.bottomAnchor, constant: padding),
+            locationLabel.topAnchor.constraint(equalTo: eventNameLabel.bottomAnchor),
             locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            locationLabel.heightAnchor.constraint(equalToConstant: locationLabel.font.pointSize + 4),
+            locationLabel.heightAnchor.constraint(equalToConstant: locationLabel.font.pointSize + 2),
             
             dateLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
-            dateLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: padding),
+            dateLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor),
             dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            dateLabel.heightAnchor.constraint(equalToConstant: 50),
+            dateLabel.heightAnchor.constraint(equalToConstant: dateLabel.font.pointSize * 2 + 2),
             
         ])
     }
