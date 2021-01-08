@@ -88,6 +88,7 @@ extension EventsTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         eventTableViewDelegate?.didTapEvent(for: events[indexPath.row])
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

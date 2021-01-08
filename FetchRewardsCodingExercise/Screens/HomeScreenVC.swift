@@ -21,11 +21,13 @@ class HomeScreenViewController: UIViewController {
         layoutUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
     
     
     private func configureNavController() {
-        navigationController?.title = "This is a Title"
-        navigationController?.navigationBar.prefersLargeTitles = true
+        title = ""
     }
     
     
