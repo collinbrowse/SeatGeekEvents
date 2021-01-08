@@ -25,6 +25,7 @@
 		BEFF955D25A77D4C00C8CA0A /* FetchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFF955C25A77D4C00C8CA0A /* FetchError.swift */; };
 		BEFF956225A77DFC00C8CA0A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFF956125A77DFC00C8CA0A /* Constants.swift */; };
 		BEFF956E25A8CA5900C8CA0A /* FetchEventImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFF956D25A8CA5900C8CA0A /* FetchEventImageView.swift */; };
+		BEFF957325A8E47C00C8CA0A /* EventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFF957225A8E47C00C8CA0A /* EventVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		BEFF955C25A77D4C00C8CA0A /* FetchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchError.swift; sourceTree = "<group>"; };
 		BEFF956125A77DFC00C8CA0A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BEFF956D25A8CA5900C8CA0A /* FetchEventImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchEventImageView.swift; sourceTree = "<group>"; };
+		BEFF957225A8E47C00C8CA0A /* EventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				BE626DFA25A665CD00979AC4 /* HomeScreenVC.swift */,
+				BEFF957225A8E47C00C8CA0A /* EventVC.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				BE626DD925A6447700979AC4 /* EventsTableView.swift in Sources */,
 				BEFF955D25A77D4C00C8CA0A /* FetchError.swift in Sources */,
 				BEFF956225A77DFC00C8CA0A /* Constants.swift in Sources */,
+				BEFF957325A8E47C00C8CA0A /* EventVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

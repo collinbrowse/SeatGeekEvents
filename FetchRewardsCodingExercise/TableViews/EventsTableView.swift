@@ -7,11 +7,17 @@
 
 import UIKit
 
+protocol EventTableViewDelegate: class {
+    func didTapEvent(for event: Event)
+}
+
+
 class EventsTableView: UITableView {
     
     enum Section { case main }
     var diffableDataSource: UITableViewDiffableDataSource<Section, Event>!
     var events: [Event] = []
+    var eventTableViewDelegate: EventTableViewDelegate?
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: .plain)
@@ -81,7 +87,7 @@ extension EventsTableView: UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected row")
+        eventTableViewDelegate?.didTapEvent(for: events[indexPath.row])
     }
 }
 

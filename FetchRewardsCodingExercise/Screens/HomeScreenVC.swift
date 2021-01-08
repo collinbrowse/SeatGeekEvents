@@ -16,6 +16,7 @@ class HomeScreenViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        eventsTableView.eventTableViewDelegate = self
         configureNavController()
         layoutUI()
     }
@@ -38,4 +39,15 @@ class HomeScreenViewController: UIViewController {
             eventsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+}
+
+
+extension HomeScreenViewController: EventTableViewDelegate {
+    
+    func didTapEvent(for event: Event) {
+        let destVC = EventViewController()
+        destVC.setEventData(event: event)
+        navigationController?.pushViewController(destVC, animated: true)
+    }
+    
 }
