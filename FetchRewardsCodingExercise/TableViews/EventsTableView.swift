@@ -44,7 +44,7 @@ class EventsTableView: UITableView {
     private func configureTableView() {
         delegate = self
         backgroundColor = .systemBackground
-        rowHeight = 175
+        rowHeight = UITableView.automaticDimension
         estimatedRowHeight = 175
         showsVerticalScrollIndicator = false
         translatesAutoresizingMaskIntoConstraints = false

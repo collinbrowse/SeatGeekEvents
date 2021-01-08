@@ -17,22 +17,20 @@ struct Events: Decodable, Hashable {
 
 struct Event: Decodable, Hashable {
     
-    var imageURL: String
     var name: String
-    var location: String
     var date: String
     var timeTBD: Bool 
     var id: Int
     var venue: Venue
+    var performers: [Performers]
     
     private enum CodingKeys: String, CodingKey {
-        case imageURL = "url" //performs/image
         case name = "title"
-        case location =  "short_title" //venue/display_location
         case date = "datetime_local"
         case timeTBD = "time_tbd"
         case id
         case venue
+        case performers
     }
 }
 
@@ -43,5 +41,15 @@ struct Venue: Decodable, Hashable {
     
     private enum CodingKeys: String, CodingKey {
         case location = "display_location"
+    }
+}
+
+
+struct Performers: Decodable, Hashable {
+    
+    var imageURL: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case imageURL = "image"
     }
 }

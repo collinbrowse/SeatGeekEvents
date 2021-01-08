@@ -11,7 +11,7 @@ class EventCell: UITableViewCell {
 
     static let reuseID = String(describing: EventCell.self)
     
-    var eventImageView = UIImageView()
+    var eventImageView = FetchEventImageView(frame: .zero)
     var eventNameLabel = UILabel()
     var locationLabel = UILabel()
     var dateLabel = UILabel()
@@ -41,6 +41,9 @@ class EventCell: UITableViewCell {
                 dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy h:mm a")
             }
         }
+        if let imageURL = event.performers.first?.imageURL {
+            eventImageView.downloadImage(fromURL: imageURL)
+        }
     }
     
     
@@ -56,6 +59,10 @@ class EventCell: UITableViewCell {
         eventNameLabel.numberOfLines = 0
         dateLabel.numberOfLines = 0
         
+        eventNameLabel.sizeToFit()
+        locationLabel.sizeToFit()
+        dateLabel.sizeToFit()
+        
         eventNameLabel.lineBreakMode = .byWordWrapping
         locationLabel.lineBreakMode = .byTruncatingTail
         dateLabel.lineBreakMode = .byWordWrapping
@@ -68,6 +75,7 @@ class EventCell: UITableViewCell {
         contentView.addSubview(eventNameLabel)
         contentView.addSubview(locationLabel)
         contentView.addSubview(dateLabel)
+        
         eventImageView.translatesAutoresizingMaskIntoConstraints = false
         eventNameLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -76,27 +84,25 @@ class EventCell: UITableViewCell {
         let padding: CGFloat = 12
         
         NSLayoutConstraint.activate([
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100 + padding * 2),   // Set a min height for the cell
             
             eventImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            eventImageView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: padding),
+            eventImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
             eventImageView.heightAnchor.constraint(equalToConstant: 100),
             eventImageView.widthAnchor.constraint(equalToConstant: 100),
             
             eventNameLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
             eventNameLabel.topAnchor.constraint(equalTo: eventImageView.topAnchor),
             eventNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            eventNameLabel.heightAnchor.constraint(equalToConstant: eventNameLabel.font.pointSize * 4 + 8),
             
             locationLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
-            locationLabel.topAnchor.constraint(equalTo: eventNameLabel.bottomAnchor),
+            locationLabel.topAnchor.constraint(equalTo: eventNameLabel.bottomAnchor, constant: padding),
             locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            locationLabel.heightAnchor.constraint(equalToConstant: locationLabel.font.pointSize + 2),
             
             dateLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
-            dateLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor),
+            dateLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: padding / 2),
             dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
-            dateLabel.heightAnchor.constraint(equalToConstant: dateLabel.font.pointSize * 2 + 2),
-            
+            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding * 2)    // Add some extra padding to the bottom
         ])
     }
     
