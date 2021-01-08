@@ -56,18 +56,7 @@ class EventsTableView: UITableView {
         
         diffableDataSource = UITableViewDiffableDataSource(tableView: self, cellProvider: { (tableView, indexPath, event) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: EventCell.reuseID, for: indexPath) as! EventCell
-            cell.eventNameLabel.text = event.name
-            cell.locationLabel.text = event.venue.location
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            if let date = dateFormatter.date(from: event.date) {
-                if event.timeTBD {
-                    cell.dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy ") + "(Time TBD)"
-                } else {
-                    cell.dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy h:mm a")
-                }
-            }
-            
+            cell.setCellData(event: event)
             return cell
         })
     }

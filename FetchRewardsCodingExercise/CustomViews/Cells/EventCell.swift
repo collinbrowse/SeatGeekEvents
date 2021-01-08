@@ -30,10 +30,17 @@ class EventCell: UITableViewCell {
     
     
     public func setCellData(event: Event) {
-        //eventImageView.image = event.imageURL
-        //eventNameLabel.text = event.name
-        //locationLabel.text = event.location
-        //dateLabel.text = event.date.getFormattedDate(format: "EEEE, MMM d, yyyy h:mm a")
+        eventNameLabel.text = event.name
+        locationLabel.text = event.venue.location
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        if let date = dateFormatter.date(from: event.date) {
+            if event.timeTBD {
+                dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy ") + "(Time TBD)"
+            } else {
+                dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy h:mm a")
+            }
+        }
     }
     
     
