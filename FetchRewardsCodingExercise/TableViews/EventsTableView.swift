@@ -16,8 +16,10 @@ class EventsTableView: UITableView {
     
     enum Section { case main }
     var diffableDataSource: UITableViewDiffableDataSource<Section, Event>!
-    var events: [Event] = []
     var eventTableViewDelegate: EventTableViewDelegate?
+    var events: [Event] = []
+    var filteredEvents: [Event] = []
+    var isSearching = false
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: .plain)
@@ -31,19 +33,6 @@ class EventsTableView: UITableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    private func loadData() {
-        NetworkManager.shared.getEvents { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .success(let events):
-                self.updateData(for: events)
-            }
-        }
     }
     
     
@@ -68,6 +57,20 @@ class EventsTableView: UITableView {
     }
     
     
+    private func loadData() {
+        NetworkManager.shared.getEvents { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let events):
+                self.events = events
+                self.updateData(for: events)
+            }
+        }
+    }
+    
+    
     func updateData(for events: [Event]) {
         
         var snapshot = NSDiffableDataSourceSnapshot<Section, Event>()
@@ -76,7 +79,21 @@ class EventsTableView: UITableView {
         DispatchQueue.main.async {
             self.diffableDataSource.apply(snapshot, animatingDifferences: true, completion: nil)
         }
-        self.events = events
+    }
+    
+    
+    func searchDidUpdate(text: String) {
+        
+        if text == "" {
+            filteredEvents.removeAll()
+            updateData(for: events)
+            isSearching = false
+            return
+        }
+        
+        isSearching = true
+        filteredEvents = events.filter { $0.name.lowercased().contains(text.lowercased()) }
+        updateData(for: filteredEvents)
     }
     
     
@@ -87,7 +104,8 @@ extension EventsTableView: UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        eventTableViewDelegate?.didTapEvent(for: events[indexPath.row])
+        let activeArray = isSearching ? filteredEvents : events
+        eventTableViewDelegate?.didTapEvent(for: activeArray[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

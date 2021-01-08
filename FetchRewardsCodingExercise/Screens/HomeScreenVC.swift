@@ -11,23 +11,30 @@ import UIKit
 class HomeScreenViewController: UIViewController {
     
     var eventsTableView = EventsTableView()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
         eventsTableView.eventTableViewDelegate = self
         configureNavController()
+        configureSearchController()
         layoutUI()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     
     private func configureNavController() {
-        title = ""
+        title = "Events"
+    }
+    
+    
+    private func configureSearchController() {
+        
+        let searchController = UISearchController()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.placeholder = "Search for an event"
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
     }
     
     
@@ -50,6 +57,15 @@ extension HomeScreenViewController: EventTableViewDelegate {
         let destVC = EventViewController()
         destVC.setEventData(event: event)
         navigationController?.pushViewController(destVC, animated: true)
+    }
+    
+}
+
+
+extension HomeScreenViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        eventsTableView.searchDidUpdate(text: searchController.searchBar.text ?? "")
     }
     
 }

@@ -26,11 +26,6 @@ class EventViewController: UIViewController {
     }
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.prefersLargeTitles = false
-    }
-    
-    
     public func setEventData(event: Event) {
         eventTitleLabel.text = event.name
         eventLocationLabel.text = event.venue.location
