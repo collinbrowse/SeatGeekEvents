@@ -9,12 +9,18 @@ import UIKit
 
 class FavoriteButton: UIButton {
     
+    let symbolConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .light)
+    lazy var filledImage = UIImage(systemName: "heart.fill", withConfiguration: symbolConfig)
+    lazy var regularImage =  UIImage(systemName: "heart", withConfiguration: symbolConfig)
+    
     override var isSelected: Bool {
         didSet {
             if self.isSelected {
                 tintColor = .systemRed
+                setImage(filledImage, for: .normal)
             } else {
                 tintColor = .label
+                setImage(regularImage, for: .normal)
             }
         }
     }
@@ -29,7 +35,7 @@ class FavoriteButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        configure()
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     
@@ -37,11 +43,4 @@ class FavoriteButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    private func configure() {
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 24, weight: .light)
-        let image = UIImage(systemName: "heart", withConfiguration: symbolConfig)
-        setImage(image, for: .normal)
-        translatesAutoresizingMaskIntoConstraints = false
-    }
 }
