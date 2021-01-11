@@ -15,11 +15,16 @@ class HomeScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
-        eventsTableView.eventTableViewDelegate = self
+        configureTableView()
         configureNavController()
         configureSearchController()
         layoutUI()
+    }
+    
+    
+    private func configureTableView() {
+        eventsTableView.eventTableViewDelegate = self
+        eventsTableView.tableFooterView = UIView()
     }
     
     
@@ -42,6 +47,7 @@ class HomeScreenViewController: UIViewController {
     
     
     private func layoutUI() {
+        view.backgroundColor = .systemBackground
         view.addSubview(eventsTableView)
         
         NSLayoutConstraint.activate([
@@ -55,6 +61,7 @@ class HomeScreenViewController: UIViewController {
 
 
 extension HomeScreenViewController: EventTableViewDelegate {
+    
     
     func didTapEvent(for event: Event) {
         let destVC = EventViewController()

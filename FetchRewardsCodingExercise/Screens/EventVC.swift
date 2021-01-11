@@ -13,11 +13,12 @@ class EventViewController: UIViewController {
     let eventImageView = FetchEventImageView(frame: .zero)
     let eventDateLabel = UILabel()
     let eventLocationLabel = UILabel()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        
         
         configureTitleLabel()
         configureImageView()
@@ -27,8 +28,10 @@ class EventViewController: UIViewController {
     
     
     public func setEventData(event: Event) {
+        
         eventTitleLabel.text = event.name
         eventLocationLabel.text = event.venue.location
+        
         if let imageURL = event.performers.first?.imageURL {
             eventImageView.downloadImage(fromURL: imageURL)
         }
@@ -45,9 +48,10 @@ class EventViewController: UIViewController {
                 eventDateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy h:mm a")
             }
         }
+        
     }
     
-    
+
     private func configureTitleLabel() {
         eventTitleLabel.backgroundColor = .clear
         eventTitleLabel.numberOfLines = 0

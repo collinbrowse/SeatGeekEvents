@@ -24,6 +24,7 @@ class EventsTableView: UITableView {
     var isSearching = false
     var selectedScope = 0
     var searchText = ""
+    var containerView: UIView!
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: .plain)
@@ -64,7 +65,6 @@ class EventsTableView: UITableView {
     
     
     private func getEvents() {
-        
         loadData { [weak self] (events)  in
             guard let self = self else { return }
             self.activeList = events
@@ -93,11 +93,13 @@ class EventsTableView: UITableView {
                 }
             }
             self.updateData(for: self.events)
+            self.dismissLoadingView()
         }
     }
     
     
     private func loadData(completed: @escaping ([Event]) -> Void) {
+        showLoadingView()
         NetworkManager.shared.getEvents { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -126,7 +128,6 @@ class EventsTableView: UITableView {
         
         searchText = text
         if text == "" {
-            print(activeList.count)
             filteredActiveList.removeAll()
             updateData(for: activeList)
             isSearching = false
@@ -217,5 +218,41 @@ extension EventsTableView {
         }
         
         self.updateData(for: activeList)
+    }
+}
+
+
+extension EventsTableView {
+    
+    func showLoadingView() {
+        
+        containerView = UIView(frame: self.bounds)
+        addSubview(containerView)
+        containerView.backgroundColor = .systemBackground
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.alpha = 0
+        UIView.animate(withDuration: 0.25) {
+            self.containerView.alpha = 0.8
+        }
+        
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        containerView.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        ])
+        activityIndicator.startAnimating()
+    }
+    
+    
+    func dismissLoadingView() {
+        DispatchQueue.main.async {
+            self.containerView.removeFromSuperview()
+            self.containerView = nil
+        }
     }
 }
