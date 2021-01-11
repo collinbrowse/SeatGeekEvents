@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol EventFavoritedDelegate: class {
+    func didTapFavorite(_ event: Event, completed: @escaping(Bool) -> Void)
+}
+
 class EventCell: UITableViewCell {
 
     static let reuseID = String(describing: EventCell.self)
@@ -15,11 +19,17 @@ class EventCell: UITableViewCell {
     var eventNameLabel = UILabel()
     var locationLabel = UILabel()
     var dateLabel = UILabel()
+    var favoriteButton = FavoriteButton(isSelected: false)
+    
+    var event: Event?
+    var eventFavoritedDelegate: EventFavoritedDelegate?
+    var indexPath: IndexPath = IndexPath()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         configureLabels()
+        configureFavoriteButton()
         configure()
     }
     
@@ -30,8 +40,11 @@ class EventCell: UITableViewCell {
     
     
     public func setCellData(event: Event) {
+        self.event = event
+        
         eventNameLabel.text = event.name
         locationLabel.text = event.venue.location
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         if let date = dateFormatter.date(from: event.date) {
@@ -41,8 +54,15 @@ class EventCell: UITableViewCell {
                 dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy h:mm a")
             }
         }
+        
         if let imageURL = event.performers.first?.imageURL {
             eventImageView.downloadImage(fromURL: imageURL)
+        }
+        
+        if event.isFavorite != nil && event.isFavorite! {
+            favoriteButton.isSelected = true
+        } else {
+            favoriteButton.isSelected = false
         }
     }
     
@@ -69,12 +89,29 @@ class EventCell: UITableViewCell {
     }
     
     
-    func configure() {
+    func configureFavoriteButton() {
+        favoriteButton.addTarget(self, action: #selector(didFavorite), for: .touchUpInside)
+    }
+    
+    
+    @objc func didFavorite() {
         
+        if event != nil {
+            eventFavoritedDelegate?.didTapFavorite(event!, completed: { (isSelected) in
+                self.favoriteButton.isSelected = isSelected
+                self.event?.isFavorite = isSelected
+            })
+        }
+    }
+    
+    
+    func configure() {
+        contentView.addSubviews(eventImageView, eventNameLabel, locationLabel, dateLabel, favoriteButton)
         contentView.addSubview(eventImageView)
         contentView.addSubview(eventNameLabel)
         contentView.addSubview(locationLabel)
         contentView.addSubview(dateLabel)
+        contentView.addSubview(favoriteButton)
         
         eventImageView.translatesAutoresizingMaskIntoConstraints = false
         eventNameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -91,17 +128,22 @@ class EventCell: UITableViewCell {
             eventImageView.heightAnchor.constraint(equalToConstant: 100),
             eventImageView.widthAnchor.constraint(equalToConstant: 100),
             
+            favoriteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: padding),
+            favoriteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            favoriteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 28),
+            
             eventNameLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
             eventNameLabel.topAnchor.constraint(equalTo: eventImageView.topAnchor),
-            eventNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            eventNameLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -padding),
             
             locationLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
             locationLabel.topAnchor.constraint(equalTo: eventNameLabel.bottomAnchor, constant: padding),
-            locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            locationLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -padding),
             
             dateLabel.leadingAnchor.constraint(equalTo: eventImageView.trailingAnchor, constant: padding),
             dateLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: padding / 2),
-            dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            dateLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -padding),
             dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -padding * 2)    // Add some extra padding to the bottom
         ])
     }

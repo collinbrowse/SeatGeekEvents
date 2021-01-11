@@ -32,8 +32,11 @@ class HomeScreenViewController: UIViewController {
         
         let searchController = UISearchController()
         searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Search for an event"
         searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.scopeButtonTitles = ["New Events", "Favorites"]
+        searchController.searchBar.showsScopeBar = true
         navigationItem.searchController = searchController
     }
     
@@ -69,3 +72,13 @@ extension HomeScreenViewController: UISearchResultsUpdating {
     }
     
 }
+
+
+
+extension HomeScreenViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        eventsTableView.updateSelectedScope(with: selectedScope)
+    }
+}
+

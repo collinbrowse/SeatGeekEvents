@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Events: Decodable, Hashable {
+struct Events: Codable, Hashable {
     var events: [Event]
     
     private enum CodingKeys: String, CodingKey {
@@ -15,7 +15,7 @@ struct Events: Decodable, Hashable {
     }
 }
 
-struct Event: Decodable, Hashable {
+struct Event: Codable {
     
     var name: String
     var date: String
@@ -23,6 +23,7 @@ struct Event: Decodable, Hashable {
     var id: Int
     var venue: Venue
     var performers: [Performers]
+    var isFavorite: Bool?
     
     private enum CodingKeys: String, CodingKey {
         case name = "title"
@@ -31,11 +32,12 @@ struct Event: Decodable, Hashable {
         case id
         case venue
         case performers
+        case isFavorite
     }
 }
 
 
-struct Venue: Decodable, Hashable {
+struct Venue: Codable, Hashable {
     
     var location: String
     
@@ -45,11 +47,23 @@ struct Venue: Decodable, Hashable {
 }
 
 
-struct Performers: Decodable, Hashable {
+struct Performers: Codable, Hashable {
     
     var imageURL: String
     
     private enum CodingKeys: String, CodingKey {
         case imageURL = "image"
+    }
+}
+
+
+
+extension Event: Equatable, Hashable {
+    static func == (lhs: Event, rhs: Event) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

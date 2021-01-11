@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE38ED7125A916E200AFFF81 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE38ED7025A916E200AFFF81 /* PersistenceManager.swift */; };
+		BE38ED8025A9402200AFFF81 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE38ED7F25A9402200AFFF81 /* FavoriteButton.swift */; };
 		BE626DA525A6426200979AC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE626DA425A6426200979AC4 /* AppDelegate.swift */; };
 		BE626DA725A6426200979AC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE626DA625A6426200979AC4 /* SceneDelegate.swift */; };
 		BE626DA925A6426200979AC4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE626DA825A6426200979AC4 /* ViewController.swift */; };
@@ -46,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BE38ED7025A916E200AFFF81 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		BE38ED7F25A9402200AFFF81 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		BE626DA125A6426200979AC4 /* FetchRewardsCodingExercise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FetchRewardsCodingExercise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE626DA425A6426200979AC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BE626DA625A6426200979AC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +102,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE38ED7E25A9401100AFFF81 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				BE38ED7F25A9402200AFFF81 /* FavoriteButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
 		BE626D9825A6426200979AC4 = {
 			isa = PBXGroup;
 			children = (
@@ -194,6 +206,7 @@
 		BE626DF925A665B900979AC4 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				BE38ED7E25A9401100AFFF81 /* Buttons */,
 				BEFF956C25A8CA4900C8CA0A /* ImageViews */,
 				BE626DE025A648D900979AC4 /* Cells */,
 			);
@@ -212,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				BEFF955625A77CF800C8CA0A /* NetworkManager.swift */,
+				BE38ED7025A916E200AFFF81 /* PersistenceManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -369,10 +383,12 @@
 				BEFF955725A77CF800C8CA0A /* NetworkManager.swift in Sources */,
 				BE626DA925A6426200979AC4 /* ViewController.swift in Sources */,
 				BE626DA525A6426200979AC4 /* AppDelegate.swift in Sources */,
+				BE38ED7125A916E200AFFF81 /* PersistenceManager.swift in Sources */,
 				BE626DEB25A65A9400979AC4 /* UIView+Ext.swift in Sources */,
 				BE626DE225A648E500979AC4 /* EventCell.swift in Sources */,
 				BE626DFB25A665CD00979AC4 /* HomeScreenVC.swift in Sources */,
 				BE626DA725A6426200979AC4 /* SceneDelegate.swift in Sources */,
+				BE38ED8025A9402200AFFF81 /* FavoriteButton.swift in Sources */,
 				BE626DD925A6447700979AC4 /* EventsTableView.swift in Sources */,
 				BEFF955D25A77D4C00C8CA0A /* FetchError.swift in Sources */,
 				BEFF956225A77DFC00C8CA0A /* Constants.swift in Sources */,

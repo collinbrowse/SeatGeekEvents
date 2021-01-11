@@ -18,8 +18,12 @@ class EventsTableView: UITableView {
     var diffableDataSource: UITableViewDiffableDataSource<Section, Event>!
     var eventTableViewDelegate: EventTableViewDelegate?
     var events: [Event] = []
-    var filteredEvents: [Event] = []
+    var favorites: [Event] = []
+    var activeList: [Event] = []
+    var filteredActiveList: [Event] = []
     var isSearching = false
+    var selectedScope = 0
+    var searchText = ""
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: .plain)
@@ -28,7 +32,8 @@ class EventsTableView: UITableView {
         
         configureTableView()
         configureDataSource()
-        loadData()
+        getEvents()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -52,12 +57,47 @@ class EventsTableView: UITableView {
         diffableDataSource = UITableViewDiffableDataSource(tableView: self, cellProvider: { (tableView, indexPath, event) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: EventCell.reuseID, for: indexPath) as! EventCell
             cell.setCellData(event: event)
+            cell.eventFavoritedDelegate = self
             return cell
         })
     }
     
     
-    private func loadData() {
+    private func getEvents() {
+        
+        loadData { [weak self] (events)  in
+            guard let self = self else { return }
+            self.activeList = events
+            self.getFavorites()
+        }
+    }
+    
+    
+    private func getFavorites() {
+        
+        PersistenceManager.retrieveFavorites { [weak self] (result) in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let favorites):
+                self.favorites = favorites
+            case .failure(let error):
+                // TODO: Add alert message
+                print("Something went wrong: \(error.rawValue)")
+            }
+            
+            // Update events from network call if they have already been favorited
+            for favorite in self.favorites {
+                if let index = self.events.firstIndex(where: { $0.id == favorite.id }) {
+                    self.events[index] = favorite
+                }
+            }
+            self.updateData(for: self.events)
+        }
+    }
+    
+    
+    private func loadData(completed: @escaping ([Event]) -> Void) {
         NetworkManager.shared.getEvents { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -65,7 +105,7 @@ class EventsTableView: UITableView {
                 print(error.localizedDescription)
             case .success(let events):
                 self.events = events
-                self.updateData(for: events)
+                completed(events)
             }
         }
     }
@@ -84,19 +124,19 @@ class EventsTableView: UITableView {
     
     func searchDidUpdate(text: String) {
         
+        searchText = text
         if text == "" {
-            filteredEvents.removeAll()
-            updateData(for: events)
+            print(activeList.count)
+            filteredActiveList.removeAll()
+            updateData(for: activeList)
             isSearching = false
             return
         }
         
         isSearching = true
-        filteredEvents = events.filter { $0.name.lowercased().contains(text.lowercased()) }
-        updateData(for: filteredEvents)
+        filteredActiveList = activeList.filter { $0.name.lowercased().contains(text.lowercased()) }
+        updateData(for: filteredActiveList)
     }
-    
-    
 }
 
 
@@ -104,10 +144,78 @@ extension EventsTableView: UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let activeArray = isSearching ? filteredEvents : events
+        let activeArray = isSearching ? filteredActiveList : activeList
         eventTableViewDelegate?.didTapEvent(for: activeArray[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
 
+extension EventsTableView: EventFavoritedDelegate {
+    
+    func didTapFavorite(_ event: Event, completed: @escaping (Bool) -> Void) {
+        
+        // Update the Event Object
+        var favoriteEvent = event
+        var actionType: PersistenceActionType?
+        favoriteEvent.isFavorite?.toggle()
+        
+        switch favoriteEvent.isFavorite {
+        case true:
+            actionType = .add
+        case false:
+            actionType = .remove
+        default:
+            favoriteEvent.isFavorite = true
+            actionType = .add
+        }
+        
+        // Update User Defaults
+        PersistenceManager.update(with: favoriteEvent, actionType: actionType!) { [weak self] (error) in
+            guard let self = self else { return }
+            
+            if error == nil {
+
+                let eventIndex = self.events.firstIndex(where: { $0.id == favoriteEvent.id })
+                let favoritesIndex = self.favorites.firstIndex(where: { $0.id == favoriteEvent.id })
+                
+                // Update the data source arrays
+                if self.selectedScope == 0 && actionType == .remove {
+                    self.events[eventIndex!] = favoriteEvent
+                    self.favorites.remove(at: favoritesIndex!)
+                    self.activeList = self.events
+                } else if self.selectedScope == 0 && actionType == .add {
+                    self.events[eventIndex!] = favoriteEvent
+                    self.favorites.append(favoriteEvent)
+                    self.activeList = self.events
+                } else if self.selectedScope == 1 && actionType == .remove {
+                    self.events[eventIndex!] = favoriteEvent
+                    self.favorites.remove(at: favoritesIndex!)
+                    self.activeList = self.favorites
+                }
+                self.searchDidUpdate(text: self.searchText)
+            } else {
+                print(error?.localizedDescription)
+            }
+            
+            completed(favoriteEvent.isFavorite!)
+        }
+    }
+}
+
+
+extension EventsTableView {
+    
+    func updateSelectedScope(with selectedScope: Int) {
+        
+        if selectedScope == 0 {
+            self.selectedScope = 0
+            activeList = events
+        } else if selectedScope == 1 {
+            self.selectedScope = 1
+            activeList = favorites
+        }
+        
+        self.updateData(for: activeList)
+    }
+}
