@@ -16,10 +16,7 @@ class EventViewController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        
-        
+                
         configureTitleLabel()
         configureImageView()
         configureLabels()
@@ -91,12 +88,13 @@ class EventViewController: UIViewController {
     
     
     private func layoutUI() {
+        view.backgroundColor = .systemBackground
+
         view.addSubviews(eventTitleLabel, eventImageView, eventDateLabel, eventLocationLabel)
         
         let padding: CGFloat = 22
         
         NSLayoutConstraint.activate([
-            
             eventTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: padding),
             eventTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             eventTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
@@ -114,6 +112,5 @@ class EventViewController: UIViewController {
             eventLocationLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             eventLocationLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding)
         ])
-    
     }
 }

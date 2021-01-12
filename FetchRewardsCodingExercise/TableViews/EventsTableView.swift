@@ -28,14 +28,12 @@ class EventsTableView: UITableView {
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: .plain)
-        
-        // TODO: Show loading screen
-        
+                
         configureTableView()
         configureDataSource()
         getEvents()
-        
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -57,8 +55,8 @@ class EventsTableView: UITableView {
         
         diffableDataSource = UITableViewDiffableDataSource(tableView: self, cellProvider: { (tableView, indexPath, event) -> UITableViewCell? in
             let cell = tableView.dequeueReusableCell(withIdentifier: EventCell.reuseID, for: indexPath) as! EventCell
-            cell.setCellData(event: event)
-            cell.eventFavoritedDelegate = self
+            cell.setCellData(event: event)  // Inject dependencies into the cell
+            cell.eventFavoritedDelegate = self  // Let the cell communicate that a favorite button was tapped
             return cell
         })
     }
@@ -82,7 +80,6 @@ class EventsTableView: UITableView {
             case .success(let favorites):
                 self.favorites = favorites
             case .failure(let error):
-                // TODO: Add alert message
                 print("Something went wrong: \(error.rawValue)")
             }
             
@@ -92,6 +89,7 @@ class EventsTableView: UITableView {
                     self.events[index] = favorite
                 }
             }
+            
             self.updateData(for: self.events)
             self.dismissLoadingView()
         }
@@ -99,6 +97,7 @@ class EventsTableView: UITableView {
     
     
     private func loadData(completed: @escaping ([Event]) -> Void) {
+        
         showLoadingView()
         NetworkManager.shared.getEvents { [weak self] result in
             guard let self = self else { return }
@@ -126,7 +125,7 @@ class EventsTableView: UITableView {
     
     func searchDidUpdate(text: String) {
         
-        searchText = text
+        searchText = text   // Remember the updated searchText so favoriting an event does not update the UI incorrectly
         if text == "" {
             filteredActiveList.removeAll()
             updateData(for: activeList)
@@ -146,6 +145,7 @@ extension EventsTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let activeArray = isSearching ? filteredActiveList : activeList
+        // Let HomeScreenVC perform the UI Navigation to the next screen
         eventTableViewDelegate?.didTapEvent(for: activeArray[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -196,7 +196,7 @@ extension EventsTableView: EventFavoritedDelegate {
                 }
                 self.searchDidUpdate(text: self.searchText)
             } else {
-                print(error?.localizedDescription)
+                print(error!.localizedDescription)
             }
             
             completed(favoriteEvent.isFavorite!)
@@ -207,6 +207,7 @@ extension EventsTableView: EventFavoritedDelegate {
 
 extension EventsTableView {
     
+    // Triggered from UISearchBarDelegate
     func updateSelectedScope(with selectedScope: Int) {
         
         if selectedScope == 0 {

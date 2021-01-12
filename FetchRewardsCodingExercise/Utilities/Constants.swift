@@ -9,7 +9,6 @@ import UIKit
 
 
 enum NetworkConstants {
-    // example request: curl https://api.seatgeek.com/2/events?client_id=MYCLIENTID
     static let seatGeekAPI = "https://api.seatgeek.com/2"
     static let eventsEndpoint = "/events"
     static let clientID = "ODc3MzUwNHwxNjEwMDQxMjI3LjYzNzM0NzI"

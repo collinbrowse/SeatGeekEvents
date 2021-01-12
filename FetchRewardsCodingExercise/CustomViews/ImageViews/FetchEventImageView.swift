@@ -41,7 +41,5 @@ class FetchEventImageView: UIImageView {
                 }
             }
         }
-        
     }
-
 }

@@ -48,6 +48,7 @@ class EventCell: UITableViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         if let date = dateFormatter.date(from: event.date) {
+            // The Seat Geek API gives a placeholder time if the time is tbd (instead of not giving a time at all)
             if event.timeTBD {
                 dateLabel.text = date.getFormattedDate(format: "EEEE, MMM d, yyyy ") + "(Time TBD)"
             } else {

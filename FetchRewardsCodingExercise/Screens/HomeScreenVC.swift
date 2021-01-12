@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class HomeScreenViewController: UIViewController {
     
     var eventsTableView = EventsTableView()
@@ -54,14 +53,14 @@ class HomeScreenViewController: UIViewController {
             eventsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             eventsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             eventsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            eventsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            eventsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 }
 
 
+// Respond to taps on a cell
 extension HomeScreenViewController: EventTableViewDelegate {
-    
     
     func didTapEvent(for event: Event) {
         let destVC = EventViewController()
@@ -72,6 +71,7 @@ extension HomeScreenViewController: EventTableViewDelegate {
 }
 
 
+// Respond to the search text changing
 extension HomeScreenViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -81,7 +81,7 @@ extension HomeScreenViewController: UISearchResultsUpdating {
 }
 
 
-
+// Respond to changes in the selected scope
 extension HomeScreenViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {

@@ -7,6 +7,11 @@
 
 import UIKit
 
+/*
+ The Event Model allows the app to process responses from the /events endpoint
+ of the SeatGeek API
+ The Event Model extracts the required information using the Codable protocol
+ */
 struct Events: Codable, Hashable {
     var events: [Event]
     
@@ -59,6 +64,7 @@ struct Performers: Codable, Hashable {
 
 
 extension Event: Equatable, Hashable {
+    
     static func == (lhs: Event, rhs: Event) -> Bool {
         return lhs.id == rhs.id
     }
